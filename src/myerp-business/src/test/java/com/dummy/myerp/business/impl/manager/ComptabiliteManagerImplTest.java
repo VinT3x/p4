@@ -1,29 +1,28 @@
 package com.dummy.myerp.business.impl.manager;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 import com.dummy.myerp.technical.exception.NotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.mockito.*;
 
 import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 
@@ -173,6 +172,52 @@ public class ComptabiliteManagerImplTest {
         when(comptabiliteDaoMock.getEcritureComptableByRef(anyString()))
                 .thenThrow(NotFoundException.class);
         assertDoesNotThrow(() -> manager.checkEcritureComptableContext(vEcritureComptable));
+
+    }
+
+    @Test
+    public void addReference() throws NotFoundException, FunctionalException, ParseException {
+        vEcritureComptable.setId(-1);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
+        vEcritureComptable.setLibelle("Cartouches d’imprimante");
+
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(606),
+                "Cartouches d’imprimante", new BigDecimal(43),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4456),
+                "TVA 20%", new BigDecimal(8),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
+                "Facture F110001", null,
+                new BigDecimal(51)));
+
+        SequenceEcritureComptable vExistingSequence = new SequenceEcritureComptable(2019,3);
+        Mockito.doReturn(vExistingSequence).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
+        Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        manager.addReference(vEcritureComptable);
+
+        Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
+        Mockito.verify(manager,times(1)).updateEcritureComptable(any());
+        Mockito.verify(manager,times(1)).insertOrUpdateSequenceEcritureComptable(any());
+
+
+        Mockito.doThrow(new NotFoundException()).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+
+        assertThrows(NotFoundException.class, () -> {
+            manager.addReference(vEcritureComptable);
+        });
+
+        Mockito.doReturn(vExistingSequence).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+        Mockito.doThrow(new FunctionalException("erreur mise à jour")).when(manager).updateEcritureComptable(any());
+
+        assertThrows(FunctionalException.class, () -> {
+            manager.addReference(vEcritureComptable);
+        });
+
+        // verification de la référence
+        Assertions.assertEquals("AC-2016/00004",vEcritureComptable.getReference());
 
     }
 
