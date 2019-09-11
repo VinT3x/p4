@@ -7,6 +7,10 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import com.dummy.myerp.business.contrat.BusinessProxy;
+import com.dummy.myerp.business.impl.TransactionManager;
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.TransactionStatus;
@@ -26,7 +30,14 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 public class ComptabiliteManagerImpl extends AbstractBusinessManager implements ComptabiliteManager {
 
     // ==================== Attributs ====================
+    private ComptabiliteDao comptabiliteDao;
 
+    /** Le Proxy d'accès à la couche Business */
+    private static BusinessProxy businessProxy;
+    /** Le Proxy d'accès à la couche Consumer-DAO */
+    private static DaoProxy daoProxy;
+    /** Le gestionnaire de Transaction */
+    private static TransactionManager transactionManager;
 
     // ==================== Constructeurs ====================
     /**
@@ -54,6 +65,14 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     @Override
     public List<EcritureComptable> getListEcritureComptable() {
         return getDaoProxy().getComptabiliteDao().getListEcritureComptable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public EcritureComptable getEcritureComptableByRef(String pRef) throws NotFoundException {
+        return comptabiliteDao.getEcritureComptableByRef(pRef);
     }
 
     /**
@@ -166,8 +185,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         if (StringUtils.isNoneEmpty(pEcritureComptable.getReference())) {
             try {
                 // Recherche d'une écriture ayant la même référence
-                EcritureComptable vECRef = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(
-                    pEcritureComptable.getReference());
+                EcritureComptable vECRef = getEcritureComptableByRef(pEcritureComptable.getReference());
 
                 // Si l'écriture à vérifier est une nouvelle écriture (id == null),
                 // ou si elle ne correspond pas à l'écriture trouvée (id != idECRef),

@@ -1,5 +1,6 @@
 package com.dummy.myerp.business.impl.manager;
 
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
@@ -10,9 +11,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 
+import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -20,6 +23,8 @@ import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 
 public class ComptabiliteManagerImplTest {
@@ -37,10 +42,13 @@ public class ComptabiliteManagerImplTest {
     @Spy
     ComptabiliteManagerImpl manager;
 
+    @Mock
+    private ComptabiliteDao comptabiliteDaoMock;
+
     private EcritureComptable vEcritureComptable;
 
     @BeforeEach
-    public void init() {
+    void init() {
         MockitoAnnotations.initMocks(this);
 
         // création d'une ecriture correcte
@@ -58,11 +66,13 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable.getListLigneEcriture().add(ligneEcritureComptable2);
     }
 
+
     @Test
     public void checkEcritureComptableUnit() throws Exception {
         // EcritureComptable correcte pas d'exeception remontée
         assertDoesNotThrow(() -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
+
 
     @Test
     public void checkEcritureComptableUnitViolation() {
@@ -135,6 +145,34 @@ public class ComptabiliteManagerImplTest {
             vEcritureComptable.setReference("BC-2019/11111");
             manager.checkEcritureComptableUnit(vEcritureComptable);
         });
+
+    }
+
+    @Test
+    public void checkEcritureComptableContext() throws NotFoundException, FunctionalException {
+
+
+        // une ecriture comptable existe déjà avec cette référence
+        EcritureComptable vEcritureComptableRefAlreadyExist = new EcritureComptable();
+        vEcritureComptableRefAlreadyExist.setReference("AC-2019/11111");
+
+
+        when(comptabiliteDaoMock.getEcritureComptableByRef(anyString()))
+                .thenReturn(vEcritureComptableRefAlreadyExist);
+
+        assertThrows(FunctionalException.class, () -> {
+            manager.checkEcritureComptableContext(vEcritureComptable);
+        });
+
+        // si elles ont le même id, donc même objet alors pas d'erreur
+        vEcritureComptable.setId(2);
+        vEcritureComptableRefAlreadyExist.setId(2);
+        assertDoesNotThrow(() -> manager.checkEcritureComptableContext(vEcritureComptable));
+
+        // si aucune référence identique, pas d'    erreur
+        when(comptabiliteDaoMock.getEcritureComptableByRef(anyString()))
+                .thenThrow(NotFoundException.class);
+        assertDoesNotThrow(() -> manager.checkEcritureComptableContext(vEcritureComptable));
 
     }
 
