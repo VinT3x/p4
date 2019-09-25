@@ -56,9 +56,15 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>myerp-technical</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- ===== Spring JDBC/Tx ===== -->
+        <!-- spring-context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
         <!-- spring-tx : transaction, JCA, DAO -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -72,8 +78,21 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <!-- ===== Log4j ===== -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
 
-        <!-- ========== Test Dependencies ========== -->
+
+
+        <!-- ===== Test unitaires ===== -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -121,16 +140,6 @@
             <artifactId>myerp-technical</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 
@@ -157,6 +166,7 @@
                                 <configuration>
                                     <sources>
                                         <source>src/test-business/java</source>
+                                        <source>src/test/java</source>
                                     </sources>
                                 </configuration>
                             </execution>

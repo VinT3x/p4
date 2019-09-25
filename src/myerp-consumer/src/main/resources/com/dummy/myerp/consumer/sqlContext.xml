@@ -8,7 +8,7 @@
 
 
     <!-- ========== ComptabiliteDaoImpl ========== -->
-    <bean id="ComptabiliteDaoImpl" class="com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl"
+    <bean id="ComptabiliteDaoImpl" class="com.dummy.myerp.testconsumer.dao.impl.db.dao.ComptabiliteDaoImpl"
           factory-method="getInstance">
         <property name="SQLgetListCompteComptable">
             <value>
@@ -58,11 +58,9 @@
         <property name="SQLinsertListLigneEcritureComptable">
             <value>
                 INSERT INTO myerp.ligne_ecriture_comptable (
-                    ecriture_id, ligne_id, compte_comptable_numero, libelle, debit
-                    credit
+                    ecriture_id, ligne_id, compte_comptable_numero, libelle, debit, credit
                 ) VALUES (
-                    :ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit,
-                    :credit
+                    :ecriture_id, :ligne_id, :compte_comptable_numero, :libelle, :debit, :credit
                 )
             </value>
         </property>
@@ -87,6 +85,21 @@
             <value>
                 DELETE FROM myerp.ligne_ecriture_comptable
                 WHERE ecriture_id = :ecriture_id
+            </value>
+        </property>
+
+        <property name="SQLgetSequenceByCodeJournalAndByAnneeCourante">
+            <value>
+                SELECT * FROM myerp.sequence_ecriture_comptable WHERE journal_code = :journal_code AND annee = :annee
+            </value>
+        </property>
+        <property name="SQLinsertOrUpdateSequenceEcritureComptable">
+            <value>
+                INSERT INTO myerp.sequence_ecriture_comptable (journal_code, annee, derniere_valeur)
+                VALUES (:journal_code, :annee, :derniere_valeur) ON CONFLICT (journal_code, annee)
+                DO UPDATE SET derniere_valeur = :derniere_valeur
+                WHERE myerp.sequence_ecriture_comptable.journal_code = :journal_code
+                AND myerp.sequence_ecriture_comptable.annee = :annee
             </value>
         </property>
     </bean>

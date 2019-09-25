@@ -1,24 +1,21 @@
 package com.dummy.myerp.business.impl.manager;
 
+import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
+import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
+import com.dummy.myerp.model.bean.comptabilite.*;
+import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.transaction.TransactionStatus;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-
-import com.dummy.myerp.business.contrat.BusinessProxy;
-import com.dummy.myerp.business.impl.TransactionManager;
-import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
-import com.dummy.myerp.model.bean.comptabilite.*;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.transaction.TransactionStatus;
-import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
-import com.dummy.myerp.business.impl.AbstractBusinessManager;
-import com.dummy.myerp.technical.exception.FunctionalException;
-import com.dummy.myerp.technical.exception.NotFoundException;
 
 
 /**
@@ -29,31 +26,25 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     // ==================== Attributs ====================
     private ComptabiliteDao comptabiliteDao;
 
-    /** Le Proxy d'accès à la couche Business */
-    private static BusinessProxy businessProxy;
-    /** Le Proxy d'accès à la couche Consumer-DAO */
-    private static DaoProxy daoProxy;
-    /** Le gestionnaire de Transaction */
-    private static TransactionManager transactionManager;
-
     // ==================== Constructeurs ====================
     /**
      * Instantiates a new Comptabilite manager.
      */
-    public ComptabiliteManagerImpl() {
+    public ComptabiliteManagerImpl(ComptabiliteDao pComptabiliteDao) {
+        this.comptabiliteDao = pComptabiliteDao;
     }
 
 
     // ==================== Getters/Setters ====================
-    @Override
+     @Override
     public List<CompteComptable> getListCompteComptable() {
-        return getDaoProxy().getComptabiliteDao().getListCompteComptable();
+        return comptabiliteDao.getListCompteComptable();
     }
 
 
     @Override
     public List<JournalComptable> getListJournalComptable() {
-        return getDaoProxy().getComptabiliteDao().getListJournalComptable();
+        return comptabiliteDao.getListJournalComptable();
     }
 
     /**
@@ -61,7 +52,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     @Override
     public List<EcritureComptable> getListEcritureComptable() {
-        return getDaoProxy().getComptabiliteDao().getListEcritureComptable();
+        return comptabiliteDao.getListEcritureComptable();
     }
 
     /**
@@ -137,7 +128,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     public void insertOrUpdateSequenceEcritureComptable(SequenceEcritureComptable pSequence) {
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            getDaoProxy().getComptabiliteDao().insertOrUpdateSequenceEcritureComptable(pSequence);
+            comptabiliteDao.insertOrUpdateSequenceEcritureComptable(pSequence);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {
@@ -150,9 +141,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
-    public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+    public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         this.checkEcritureComptableUnit(pEcritureComptable);
         this.checkEcritureComptableContext(pEcritureComptable);
     }
@@ -165,8 +155,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    // TODO tests à compléter
-    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
+    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
@@ -255,11 +244,11 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * {@inheritDoc}
      */
     @Override
-    public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+    public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         this.checkEcritureComptable(pEcritureComptable);
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            getDaoProxy().getComptabiliteDao().insertEcritureComptable(pEcritureComptable);
+            comptabiliteDao.insertEcritureComptable(pEcritureComptable);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {
@@ -272,18 +261,18 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @return
      */
     @Override
-    public EcritureComptable updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+    public EcritureComptable updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         this.checkEcritureComptable(pEcritureComptable);
-        EcritureComptable ecritureComptable;
+
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            ecritureComptable = comptabiliteDao.updateEcritureComptable(pEcritureComptable);
+            comptabiliteDao.updateEcritureComptable(pEcritureComptable);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {
             getTransactionManager().rollbackMyERP(vTS);
         }
-        return ecritureComptable;
+        return pEcritureComptable;
     }
 
     /**
@@ -293,7 +282,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     public void deleteEcritureComptable(Integer pId) {
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
-            getDaoProxy().getComptabiliteDao().deleteEcritureComptable(pId);
+            comptabiliteDao.deleteEcritureComptable(pId);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {

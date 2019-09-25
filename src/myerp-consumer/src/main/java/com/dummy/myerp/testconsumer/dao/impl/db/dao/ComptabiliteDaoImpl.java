@@ -1,4 +1,4 @@
-package com.dummy.myerp.consumer.dao.impl.db.dao;
+package com.dummy.myerp.testconsumer.dao.impl.db.dao;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.*;
@@ -219,7 +219,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         // ===== Ecriture Comptable
         NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
-        vSqlParams.addValue(ECRITURE_ID, pEcritureComptable.getId());
+        vSqlParams.addValue("id", pEcritureComptable.getId());
         vSqlParams.addValue(JOURNAL_CODE, pEcritureComptable.getJournal().getCode());
         vSqlParams.addValue(REFERENCE, pEcritureComptable.getReference());
         vSqlParams.addValue(DATE, pEcritureComptable.getDate(), Types.DATE);

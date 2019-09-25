@@ -20,6 +20,7 @@
     <name>${project.artifactId}</name>
 
 
+
     <!-- =============================================================== -->
     <!-- Distrubution management -->
     <!-- =============================================================== -->
@@ -36,6 +37,8 @@
     <!-- Properties -->
     <!-- =============================================================== -->
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
 
@@ -58,8 +61,31 @@
 
         <!-- ========== Test Dependencies ========== -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -106,6 +132,7 @@
                                 <configuration>
                                     <sources>
                                         <source>src/test-consumer/java</source>
+                                        <source>src/test-business/java</source>
                                     </sources>
                                 </configuration>
                             </execution>
@@ -114,7 +141,7 @@
                 </plugins>
                 <testResources>
                     <testResource>
-                        <directory>src/test/resources</directory>
+                        <directory>src/test-consumer/resources</directory>
                     </testResource>
                     <testResource>
                         <directory>src/test-consumer/resources</directory>

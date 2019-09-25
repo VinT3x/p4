@@ -1,10 +1,10 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import java.math.BigDecimal;
+import com.dummy.myerp.model.validation.constraint.MontantComptable;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.dummy.myerp.model.validation.constraint.MontantComptable;
+import java.math.BigDecimal;
 
 
 /**

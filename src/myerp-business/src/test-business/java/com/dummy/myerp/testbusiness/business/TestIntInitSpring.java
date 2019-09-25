@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Classe de test de l'initialisation du contexte Spring
  */
-public class TestInitSpring extends BusinessTestCase {
+public class TestIntInitSpring extends BusinessTestCase {
 
     /**
      * Constructeur.
      */
-    public TestInitSpring() {
+    public TestIntInitSpring() {
         super();
     }
 

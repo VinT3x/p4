@@ -1,10 +1,10 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface ComptabiliteManager {
 
+    // ==================== Getters/Setters ====================
+
     /**
      * Renvoie la liste des comptes comptables.
      *
@@ -64,7 +66,7 @@ public interface ComptabiliteManager {
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException;
+    void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException;
 
     /**
      * Insert une nouvelle écriture comptable.
@@ -72,7 +74,7 @@ public interface ComptabiliteManager {
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException;
+    void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException;
 
     /**
      * Met à jour l'écriture comptable.
@@ -81,7 +83,7 @@ public interface ComptabiliteManager {
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      * @return
      */
-    EcritureComptable updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException;
+    EcritureComptable updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException;
 
     /**
      * Supprime l'écriture comptable d'id {@code pId}.

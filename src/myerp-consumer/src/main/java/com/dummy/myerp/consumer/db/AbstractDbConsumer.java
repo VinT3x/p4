@@ -1,14 +1,14 @@
 package com.dummy.myerp.consumer.db;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.sql.DataSource;
-
+import com.dummy.myerp.consumer.ConsumerHelper;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
-import com.dummy.myerp.consumer.ConsumerHelper;
-import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

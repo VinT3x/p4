@@ -47,7 +47,7 @@ public class SequenceEcritureComptable {
         derniereValeur = pDerniereValeur;
     }
     public String getJournalCode() {return journalCode;}
-    public void setJournalCode(String journalCode) {this.journalCode = journalCode;}
+    public void setJournalCode(String pJournalCode) {this.journalCode = pJournalCode;}
 
 
     // ==================== Méthodes ====================

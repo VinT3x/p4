@@ -3,13 +3,6 @@ package com.dummy.myerp.business.impl.manager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
-
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
 import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import javax.validation.ConstraintViolationException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,17 +23,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 
-public class ComptabiliteManagerImplTest {
-
-
+class ComptabiliteManagerImplTest {
 
 //    @Mock is used for mock creation. It makes the test class more readable.
 //    @Spy is used to create a spy instance. We can use it instead spy(Object) method.
 //    @InjectMocks is used to instantiate the tested object automatically and inject all the @Mock or @Spy annotated field dependencies into it (if applicable).
 //    @Captor is used to create an argument captor
 
-//    private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
-//
+
     @InjectMocks
     @Spy
     ComptabiliteManagerImpl manager;
@@ -67,14 +61,14 @@ public class ComptabiliteManagerImplTest {
 
 
     @Test
-    public void checkEcritureComptableUnit() throws Exception {
+    void checkEcritureComptableUnit() throws Exception {
         // EcritureComptable correcte pas d'exeception remontée
         assertDoesNotThrow(() -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
 
 
     @Test
-    public void checkEcritureComptableUnitViolation() {
+    void checkEcritureComptableUnitViolation() {
         // EcritureComptable null
         assertThrows(ConstraintViolationException.class, () -> manager.checkEcritureComptableUnit(new EcritureComptable()));
 
@@ -84,7 +78,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG2() {
+    void checkEcritureComptableUnitRG2() {
         // les débits != crédits
         assertThrows(FunctionalException.class, () -> {
             vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
@@ -99,7 +93,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG3() {
+    void checkEcritureComptableUnitRG3() {
         assertThrows(FunctionalException.class, () -> {
             // pas de crédit
             vEcritureComptable.getListLigneEcriture().clear();
@@ -132,7 +126,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableUnitRG5() {
+    void checkEcritureComptableUnitRG5() {
         // l'année de référence != à la date de l'écriture
         assertThrows(FunctionalException.class, () -> {
             vEcritureComptable.setReference("AC-2012/11111");
@@ -148,16 +142,13 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void checkEcritureComptableContext() throws NotFoundException, FunctionalException {
-
+    void checkEcritureComptableContext() throws NotFoundException, FunctionalException {
 
         // une ecriture comptable existe déjà avec cette référence
         EcritureComptable vEcritureComptableRefAlreadyExist = new EcritureComptable();
         vEcritureComptableRefAlreadyExist.setReference("AC-2019/11111");
 
-
-        when(comptabiliteDaoMock.getEcritureComptableByRef(anyString()))
-                .thenReturn(vEcritureComptableRefAlreadyExist);
+        when(comptabiliteDaoMock.getEcritureComptableByRef(anyString())).thenReturn(vEcritureComptableRefAlreadyExist);
 
         assertThrows(FunctionalException.class, () -> {
             manager.checkEcritureComptableContext(vEcritureComptable);
@@ -176,7 +167,7 @@ public class ComptabiliteManagerImplTest {
     }
 
     @Test
-    public void addReference() throws NotFoundException, FunctionalException, ParseException {
+    void addReference() throws NotFoundException, FunctionalException, ParseException {
         vEcritureComptable.setId(-1);
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
