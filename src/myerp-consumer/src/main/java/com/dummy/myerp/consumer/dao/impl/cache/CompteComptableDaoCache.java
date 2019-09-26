@@ -36,7 +36,6 @@ public class CompteComptableDaoCache {
             listCompteComptable = ConsumerHelper.getDaoProxy().getComptabiliteDao().getListCompteComptable();
         }
 
-        CompteComptable vRetour = CompteComptable.getByNumero(listCompteComptable, pNumero);
-        return vRetour;
+        return CompteComptable.getByNumero(listCompteComptable, pNumero);
     }
 }

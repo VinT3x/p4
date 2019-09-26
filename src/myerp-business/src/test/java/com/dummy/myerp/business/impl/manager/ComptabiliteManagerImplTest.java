@@ -61,7 +61,7 @@ class ComptabiliteManagerImplTest {
 
 
     @Test
-    void checkEcritureComptableUnit() throws Exception {
+    void checkEcritureComptableUnit() {
         // EcritureComptable correcte pas d'exeception remontée
         assertDoesNotThrow(() -> manager.checkEcritureComptableUnit(vEcritureComptable));
     }
@@ -142,7 +142,7 @@ class ComptabiliteManagerImplTest {
     }
 
     @Test
-    void checkEcritureComptableContext() throws NotFoundException, FunctionalException {
+    void checkEcritureComptableContext() throws NotFoundException {
 
         // une ecriture comptable existe déjà avec cette référence
         EcritureComptable vEcritureComptableRefAlreadyExist = new EcritureComptable();

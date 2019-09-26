@@ -24,12 +24,12 @@ public abstract class BusinessTestCase {
     /**
      * Constructeur.
      */
-    public BusinessTestCase() {
+    BusinessTestCase() {
     }
 
 
     // ==================== Getters/Setters ====================
-    public static BusinessProxy getBusinessProxy() {
+    static BusinessProxy getBusinessProxy() {
         return BUSINESS_PROXY;
     }
 

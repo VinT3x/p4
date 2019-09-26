@@ -14,7 +14,7 @@ public class TestIntInitSpring extends BusinessTestCase {
     /**
      * Constructeur.
      */
-    public TestIntInitSpring() {
+    TestIntInitSpring() {
         super();
     }
 
@@ -23,7 +23,7 @@ public class TestIntInitSpring extends BusinessTestCase {
      * Teste l'initialisation du contexte Spring
      */
     @Test
-    public void testInit() {
+    void testInit() {
         SpringRegistry.init();
         assertNotNull(SpringRegistry.getBusinessProxy());
         assertNotNull(SpringRegistry.getTransactionManager());

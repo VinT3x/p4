@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class EcritureComptableTest {
+class EcritureComptableTest {
 
 
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
@@ -17,15 +17,14 @@ public class EcritureComptableTest {
         BigDecimal vCredit = pCredit == null ? null : new BigDecimal(pCredit);
         String vLibelle = ObjectUtils.defaultIfNull(vDebit, BigDecimal.ZERO)
                 .subtract(ObjectUtils.defaultIfNull(vCredit, BigDecimal.ZERO)).toPlainString();
-        LigneEcritureComptable vRetour = new LigneEcritureComptable(new CompteComptable(pCompteComptableNumero),
+        return new LigneEcritureComptable(new CompteComptable(pCompteComptableNumero),
                 vLibelle,
                 vDebit, vCredit);
-        return vRetour;
     }
 
     @Test
     @DisplayName("isEquilibree() test")
-    public void isEquilibree() {
+    void isEquilibree() {
         EcritureComptable vEcriture;
         vEcriture = new EcritureComptable();
 
@@ -47,7 +46,7 @@ public class EcritureComptableTest {
 
     @Test
     @DisplayName("getTotalDebit() test")
-    public void getTotalDebit() {
+    void getTotalDebit() {
         EcritureComptable vEcriture;
         vEcriture = new EcritureComptable();
 

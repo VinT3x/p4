@@ -136,7 +136,7 @@ class TestIntComptabiliteDaoImpl extends ConsumerTestCase {
                 "Facture épinard M. Popeye FACT456", null,
                 new BigDecimal(110)));
 
-        dao.updateEcritureComptable(vEcritureComptable);
+        assertNotNull(dao.updateEcritureComptable(vEcritureComptable));
     }
 
 

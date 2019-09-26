@@ -25,7 +25,7 @@ class TestIntComptabiliteManager {
 
     @Test
     @Order(1)
-    void insertEcritureComptableTest() throws FunctionalException, NotFoundException {
+    void insertEcritureComptableTest() {
         EcritureComptable vEcritureComptableSample = new EcritureComptable();
         vEcritureComptableSample.setJournal(new JournalComptable("VE", "Vente"));
         vEcritureComptableSample.setDate(Date.from(Instant.now()));
@@ -39,7 +39,8 @@ class TestIntComptabiliteManager {
                 null, null,
                 new BigDecimal(123)));
 
-        vComptabiliteManager.insertEcritureComptable(vEcritureComptableSample);
+        assertDoesNotThrow(() -> vComptabiliteManager.insertEcritureComptable(vEcritureComptableSample));
+
     }
 
     @Test
@@ -51,17 +52,18 @@ class TestIntComptabiliteManager {
 
     @Test
     @Order(3)
-    void updateEcritureComptable() throws FunctionalException, NotFoundException {
+    void updateEcritureComptable() throws NotFoundException {
         EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
         ec.setLibelle("modif libelle vente TI");
-        vComptabiliteManager.updateEcritureComptable(ec);
+
+        assertDoesNotThrow(() -> vComptabiliteManager.updateEcritureComptable(ec));
     }
 
     @Test
     @Order(4)
     void deleteEcritureComptableTest() throws NotFoundException {
         EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
-        vComptabiliteManager.deleteEcritureComptable(ec.getId());
+        assertDoesNotThrow(() -> vComptabiliteManager.deleteEcritureComptable(ec.getId()));
     }
 
 

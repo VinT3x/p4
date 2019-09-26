@@ -40,8 +40,18 @@ public interface ComptabiliteManager {
      */
     List<EcritureComptable> getListEcritureComptable();
 
+    /**
+     * Renvoie l'écriture comptable corespondant à la ref passée en paramètre.
+     *
+     * @return {@link EcritureComptable}
+     */
     EcritureComptable getEcritureComptableByRef(String pRef) throws NotFoundException;
 
+    /**
+     * Renvoie la séquence écriture comptable de l'année en cours corespondant au code journal.
+     *
+     * @return {@link SequenceEcritureComptable}
+     */
     SequenceEcritureComptable getSequenceByCodeJournalAndByAnneeCourante(SequenceEcritureComptable pSeqEcritureComptable) throws NotFoundException;
 
     /**

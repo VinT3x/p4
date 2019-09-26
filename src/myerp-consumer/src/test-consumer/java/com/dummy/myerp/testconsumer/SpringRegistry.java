@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Registre des Beans Spring.
  */
-public final class SpringRegistry {
+final class SpringRegistry {
 
     /** Logger Log4j pour la classe */
     private static final Logger LOGGER = LogManager.getLogger(SpringRegistry.class);
@@ -28,9 +28,6 @@ public final class SpringRegistry {
     private ApplicationContext contextAppli;
 
 
-    // ==================== ID des Beans Spring ====================
-
-
     /**
      * Constructeur.
      */
@@ -46,7 +43,7 @@ public final class SpringRegistry {
      *
      * @return SpringRegistry
      */
-    protected static final SpringRegistry getInstance() {
+    private static SpringRegistry getInstance() {
         return SpringRegistry.INSTANCE;
     }
 
@@ -55,7 +52,7 @@ public final class SpringRegistry {
      *
      * @return ApplicationContext
      */
-    public static final ApplicationContext init() {
+    static ApplicationContext init() {
         // le fait d'appeler cette méthode, déclanche l'appel des initialisation static et donc le chargement du context
         return getInstance().contextAppli;
     }
@@ -63,13 +60,12 @@ public final class SpringRegistry {
     /**
      * Récupération d'un bean via Spring.
      *
-     * @param pBeanId ID du bean
      * @return Object
      */
-    protected static Object getBean(String pBeanId) {
-        SpringRegistry.LOGGER.debug("[DEBUT] SpringRegistry.getBean() - Bean ID : " + pBeanId);
-        Object vBean = SpringRegistry.getInstance().contextAppli.getBean(pBeanId);
-        SpringRegistry.LOGGER.debug("[FIN] SpringRegistry.getBean() - Bean ID : " + pBeanId);
+    private static Object getBeanDaoProxy() {
+        SpringRegistry.LOGGER.debug("[DEBUT] SpringRegistry.getBean() - Bean ID : " + "daoProxy");
+        Object vBean = SpringRegistry.getInstance().contextAppli.getBean("daoProxy");
+        SpringRegistry.LOGGER.debug("[FIN] SpringRegistry.getBean() - Bean ID : " + "daoProxy");
         return vBean;
     }
 
@@ -79,7 +75,7 @@ public final class SpringRegistry {
      *
      * @return {@link DaoProxy}
      */
-    public static DaoProxy getDaoProxy() {
-        return (DaoProxy) SpringRegistry.getBean("daoProxy");
+    static DaoProxy getDaoProxy() {
+        return (DaoProxy) SpringRegistry.getBeanDaoProxy();
     }
 }
