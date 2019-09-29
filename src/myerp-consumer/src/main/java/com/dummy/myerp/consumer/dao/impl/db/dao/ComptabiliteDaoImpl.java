@@ -1,4 +1,4 @@
-package com.dummy.myerp.testconsumer.dao.impl.db.dao;
+package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.impl.db.rowmapper.comptabilite.*;

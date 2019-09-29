@@ -2,11 +2,8 @@ package com.dummy.myerp.testbusiness.business;
 
 import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
-import com.dummy.myerp.testconsumer.dao.impl.db.dao.ComptabiliteDaoImpl;
-import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
-import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
-import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
+import com.dummy.myerp.model.bean.comptabilite.*;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.jupiter.api.*;
@@ -14,8 +11,9 @@ import org.junit.jupiter.api.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestIntComptabiliteManager {
@@ -61,6 +59,47 @@ class TestIntComptabiliteManager {
 
     @Test
     @Order(4)
+    void insertOrUpdateSequenceEcritureComptable() {
+        SequenceEcritureComptable sec = new SequenceEcritureComptable();
+        sec.setAnnee(2019);
+        sec.setJournalCode("VE");
+        sec.setDerniereValeur(12);
+
+        assertDoesNotThrow(() -> vComptabiliteManager.insertOrUpdateSequenceEcritureComptable(sec));
+    }
+
+    @Test
+    @Order(5)
+    void getSequenceByCodeJournalAndByAnneeCourante() {
+        SequenceEcritureComptable sec = new SequenceEcritureComptable();
+        sec.setAnnee(2019);
+        sec.setJournalCode("VE");
+        sec.setDerniereValeur(12);
+
+        assertDoesNotThrow(() -> vComptabiliteManager.getSequenceByCodeJournalAndByAnneeCourante(sec));
+    }
+
+    @Test
+    void getListCompteComptable() {
+        List<CompteComptable> compteComptables = vComptabiliteManager.getListCompteComptable();
+        assertFalse(compteComptables.isEmpty());
+    }
+
+    @Test
+    void getListJournalComptable() {
+        List<JournalComptable> journalComptables = vComptabiliteManager.getListJournalComptable();
+        assertFalse(journalComptables.isEmpty());
+    }
+
+    @Test
+    void getListEcritureComptable() {
+        List<EcritureComptable> ecritureComptables = vComptabiliteManager.getListEcritureComptable();
+        assertFalse(ecritureComptables.isEmpty());
+    }
+
+
+    @Test
+    @Order(6)
     void deleteEcritureComptableTest() throws NotFoundException {
         EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
         assertDoesNotThrow(() -> vComptabiliteManager.deleteEcritureComptable(ec.getId()));

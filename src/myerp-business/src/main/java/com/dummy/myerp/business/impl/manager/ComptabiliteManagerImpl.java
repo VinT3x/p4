@@ -184,9 +184,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         }
         // On test le nombre de lignes car si l'écriture à une seule ligne
         //      avec un montant au débit et un montant au crédit ce n'est pas valable
-        if (pEcritureComptable.getListLigneEcriture().size() < 2
-            || vNbrCredit < 1
-            || vNbrDebit < 1) {
+        if (vNbrCredit < 1 || vNbrDebit < 1) {
             throw new FunctionalException(
                 "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
@@ -201,15 +199,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         if (!pEcritureComptable.getReference().substring(0, 2).equals(pEcritureComptable.getJournal().getCode()))
             throw new FunctionalException(
                     "Le code journal dans la référence doit correspondre au code du journal en question.");
-
-        // test du nombre de lignes car si l'écriture à une seule ligne
-        //      avec un montant au débit et un montant au crédit ce n'est pas valable
-        if (pEcritureComptable.getListLigneEcriture().size() < 2
-                || vNbrCredit < 1
-                || vNbrDebit < 1) {
-            throw new FunctionalException(
-                    "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
-        }
     }
 
 

@@ -322,6 +322,22 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/SequenceEcritureComptable.*</exclude>
+                        <exclude>**/JournalComptable.*</exclude>
+                        <exclude>**/CompteComptable.*</exclude>
+                        <exclude>**/LigneEcritureComptable.*</exclude>
+                        <exclude>**/ConsumerHelper.*</exclude>
+                        <exclude>com/dummy/myerp/consumer/db/**/*</exclude>
+                        <exclude>**/AbstractDbConsumer*</exclude>
+                        <exclude>**/DataSourcesEnum*</exclude>
+                        <exclude>com/dummy/myerp/consumer/dao/impl/cache/*</exclude>
+                        <exclude>**/TransactionManager.*</exclude>
+                        <exclude>**/BusinessProxyImpl.*</exclude>
+                        <exclude>**/AbstractBusinessManager.*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -329,12 +345,77 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+<!--                        <configuration>-->
+<!--                            <rules>-->
+<!--                                <rule>-->
+<!--                                <element>CLASS</element>-->
+<!--                                <excludes>-->
+<!--                                    <exclude>JAVAC.SYNTHCLASS</exclude>-->
+<!--                                </excludes>-->
+<!--                            </rule>-->
+<!--                                <rule>-->
+<!--                                    <element>PACKAGE</element>-->
+<!--                                    <limits>-->
+<!--                                        <limit>-->
+<!--                                            <counter>LINE</counter>-->
+<!--                                            <value>COVEREDRATIO</value>-->
+<!--                                            <minimum>0.70</minimum>-->
+<!--                                        </limit>-->
+<!--                                    </limits>-->
+<!--                                </rule>-->
+<!--                            </rules>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 <!--                    <execution>-->
 <!--                        <id>default-check</id>-->
 <!--                        <goals>-->
 <!--                            <goal>check</goal>-->
 <!--                        </goals>-->
-<!--                        <configuration>-->
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>JAVAC.SYNTHCLASS</exclude>
+                                    </excludes>
+                                </rule>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>**/SequenceEcritureComptable.*</exclude>
+                                        <exclude>**/JournalComptable.*</exclude>
+                                        <exclude>**/CompteComptable.*</exclude>
+                                        <exclude>**/LigneEcritureComptable.*</exclude>
+                                        <exclude>**/ConsumerHelper.*</exclude>
+                                        <exclude>com/dummy/myerp/consumer/db/**/*</exclude>
+                                        <exclude>**/AbstractDbConsumer*</exclude>
+                                        <exclude>**/DataSourcesEnum*</exclude>
+                                        <exclude>com/dummy/myerp/consumer/dao/impl/cache/*</exclude>
+                                        <exclude>**/TransactionManager.*</exclude>
+                                        <exclude>**/BusinessProxyImpl.*</exclude>
+                                        <exclude>**/AbstractBusinessManager.*</exclude>
+                                    </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>75%</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
 <!--                            <rules >-->
 <!--                                <rule implementation="org.jacoco.maven.RuleConfiguration">-->
 <!--                                    &lt;!&ndash; BUNDLE for whole code under analysis &ndash;&gt;-->
@@ -348,8 +429,8 @@
 <!--                                    </limits>-->
 <!--                                </rule>-->
 <!--                            </rules>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                        </configuration>
+                    </execution>
                 </executions>
 
             </plugin>

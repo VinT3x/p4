@@ -123,6 +123,19 @@ class ComptabiliteManagerImplTest {
                     null));
             manager.checkEcritureComptableUnit(vEcritureComptable);
         });
+
+        // sans ligne d'écriture credit
+        assertThrows(FunctionalException.class, () -> {
+            vEcritureComptable.getListLigneEcriture().clear();
+            vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                    null, new BigDecimal(123),
+                    null));
+            vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                    null, new BigDecimal(-123),
+                    null));
+
+            manager.checkEcritureComptableUnit(vEcritureComptable);
+        });
     }
 
     @Test
@@ -209,6 +222,39 @@ class ComptabiliteManagerImplTest {
 
         // verification de la référence
         Assertions.assertEquals("AC-2016/00004",vEcritureComptable.getReference());
+
+    }
+
+    @Test
+    void addReferenceNoExistingSequence() throws NotFoundException, FunctionalException, ParseException {
+        vEcritureComptable.setId(-1);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
+        vEcritureComptable.setLibelle("Cartouches d’imprimante");
+
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(606),
+                "Cartouches d’imprimante", new BigDecimal(43),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4456),
+                "TVA 20%", new BigDecimal(8),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
+                "Facture F110001", null,
+                new BigDecimal(51)));
+
+        Mockito.doReturn(null).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
+        Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        manager.addReference(vEcritureComptable);
+
+        Mockito.doThrow(new NotFoundException()).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+
+        assertThrows(NotFoundException.class, () -> {
+            manager.addReference(vEcritureComptable);
+        });
+
+        // verification de la référence
+        Assertions.assertEquals("AC-2016/00001",vEcritureComptable.getReference());
 
     }
 
