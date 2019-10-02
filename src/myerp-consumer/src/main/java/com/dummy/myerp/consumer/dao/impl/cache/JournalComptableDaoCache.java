@@ -20,8 +20,7 @@ public class JournalComptableDaoCache {
     /**
      * Instantiates a new Compte comptable dao cache.
      */
-    public JournalComptableDaoCache() {
-    }
+    public JournalComptableDaoCache() {}
 
 
     // ==================== Méthodes ====================

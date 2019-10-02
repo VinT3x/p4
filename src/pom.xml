@@ -357,32 +357,6 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
-<!--                        <configuration>-->
-<!--                            <rules>-->
-<!--                                <rule>-->
-<!--                                <element>CLASS</element>-->
-<!--                                <excludes>-->
-<!--                                    <exclude>JAVAC.SYNTHCLASS</exclude>-->
-<!--                                </excludes>-->
-<!--                            </rule>-->
-<!--                                <rule>-->
-<!--                                    <element>PACKAGE</element>-->
-<!--                                    <limits>-->
-<!--                                        <limit>-->
-<!--                                            <counter>LINE</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>0.70</minimum>-->
-<!--                                        </limit>-->
-<!--                                    </limits>-->
-<!--                                </rule>-->
-<!--                            </rules>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>default-check</id>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
                         <configuration>
                             <rules>
                                 <rule>
@@ -393,42 +367,15 @@
                                 </rule>
                                 <rule>
                                     <element>CLASS</element>
-                                    <excludes>
-                                        <exclude>**/SequenceEcritureComptable.*</exclude>
-                                        <exclude>**/JournalComptable.*</exclude>
-                                        <exclude>**/CompteComptable.*</exclude>
-                                        <exclude>**/LigneEcritureComptable.*</exclude>
-                                        <exclude>**/ConsumerHelper.*</exclude>
-                                        <exclude>com/dummy/myerp/consumer/db/**/*</exclude>
-                                        <exclude>**/AbstractDbConsumer*</exclude>
-                                        <exclude>**/DataSourcesEnum*</exclude>
-                                        <exclude>com/dummy/myerp/consumer/dao/impl/cache/*</exclude>
-                                        <exclude>**/TransactionManager.*</exclude>
-                                        <exclude>**/BusinessProxyImpl.*</exclude>
-                                        <exclude>**/AbstractBusinessManager.*</exclude>
-                                    </excludes>
-                                    <limits>
+                                     <limits>
                                         <limit>
-                                            <counter>INSTRUCTION</counter>
+                                            <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>75%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
                             </rules>
-<!--                            <rules >-->
-<!--                                <rule implementation="org.jacoco.maven.RuleConfiguration">-->
-<!--                                    &lt;!&ndash; BUNDLE for whole code under analysis &ndash;&gt;-->
-<!--                                    <element>BUNDLE</element>-->
-<!--                                    <limits>-->
-<!--                                        <limit implementation="org.jacoco.report.check.Limit">-->
-<!--                                            <counter>INSTRUCTION</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>75.0</minimum>-->
-<!--                                        </limit>-->
-<!--                                    </limits>-->
-<!--                                </rule>-->
-<!--                            </rules>-->
                         </configuration>
                     </execution>
                 </executions>

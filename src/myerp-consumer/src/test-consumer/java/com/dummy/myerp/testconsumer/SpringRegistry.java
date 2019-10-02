@@ -63,9 +63,10 @@ final class SpringRegistry {
      * @return Object
      */
     private static Object getBeanDaoProxy() {
-        SpringRegistry.LOGGER.debug("[DEBUT] SpringRegistry.getBean() - Bean ID : " + "daoProxy");
-        Object vBean = SpringRegistry.getInstance().contextAppli.getBean("daoProxy");
-        SpringRegistry.LOGGER.debug("[FIN] SpringRegistry.getBean() - Bean ID : " + "daoProxy");
+        String DAOPROXY = "daoProxy";
+        SpringRegistry.LOGGER.debug("[DEBUT] SpringRegistry.getBean() - Bean ID : " + DAOPROXY);
+        Object vBean = SpringRegistry.getInstance().contextAppli.getBean(DAOPROXY);
+        SpringRegistry.LOGGER.debug("[FIN] SpringRegistry.getBean() - Bean ID : " + DAOPROXY);
         return vBean;
     }
 

@@ -65,7 +65,7 @@ class TestIntComptabiliteDaoImpl extends ConsumerTestCase {
     @Test
     void getListEcritureComptable() {
         List<EcritureComptable> vList = dao.getListEcritureComptable();
-        assertTrue(vList.size()>0);
+        assertFalse(vList.isEmpty());
     }
 
     @Test
@@ -95,6 +95,15 @@ class TestIntComptabiliteDaoImpl extends ConsumerTestCase {
         assertEquals(3, vEcritureComptable.getListLigneEcriture().size());
     }
 
+    @Test
+    void getListCompteComptableTest() {
+        assertEquals(7, dao.getListCompteComptable().size());
+    }
+
+    @Test
+    void getListJournalComptableTest() {
+        assertEquals(4, dao.getListJournalComptable().size());
+    }
 
     @Test
     @Order(1)

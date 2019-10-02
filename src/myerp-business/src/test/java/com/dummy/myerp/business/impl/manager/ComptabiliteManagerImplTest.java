@@ -180,9 +180,12 @@ class ComptabiliteManagerImplTest {
     }
 
     @Test
-    void addReference() throws NotFoundException, FunctionalException, ParseException {
+    void addReferenceWithSequenceEcritureComptable() throws NotFoundException, FunctionalException, ParseException {
         vEcritureComptable.setId(-1);
-        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        JournalComptable journalComptable = new JournalComptable();
+        journalComptable.setCode("AC");
+        journalComptable.setLibelle("Achat");
+        vEcritureComptable.setJournal(journalComptable);
         vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
         vEcritureComptable.setLibelle("Cartouches d’imprimante");
 
@@ -198,30 +201,49 @@ class ComptabiliteManagerImplTest {
 
         SequenceEcritureComptable vExistingSequence = new SequenceEcritureComptable(2019,3);
         Mockito.doReturn(vExistingSequence).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
-        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
         manager.addReference(vEcritureComptable);
 
         Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
-        Mockito.verify(manager,times(1)).updateEcritureComptable(any());
         Mockito.verify(manager,times(1)).insertOrUpdateSequenceEcritureComptable(any());
-
-
-        Mockito.doThrow(new NotFoundException()).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
-
-        assertThrows(NotFoundException.class, () -> {
-            manager.addReference(vEcritureComptable);
-        });
-
-        Mockito.doReturn(vExistingSequence).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
-        Mockito.doThrow(new FunctionalException("erreur mise à jour")).when(manager).updateEcritureComptable(any());
-
-        assertThrows(FunctionalException.class, () -> {
-            manager.addReference(vEcritureComptable);
-        });
 
         // verification de la référence
         Assertions.assertEquals("AC-2016/00004",vEcritureComptable.getReference());
+
+    }
+
+    @Test
+    void addReferenceWithoutSequenceEcritureComptable() throws NotFoundException, FunctionalException, ParseException {
+        vEcritureComptable.setId(-1);
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
+        vEcritureComptable.setLibelle("Cartouches d’imprimante");
+
+        CompteComptable compteComptable = new CompteComptable(606);
+
+        LigneEcritureComptable ligneEcritureComptable = new LigneEcritureComptable();
+        ligneEcritureComptable.setCompteComptable(compteComptable);
+        ligneEcritureComptable.setCredit(null);
+        ligneEcritureComptable.setDebit(new BigDecimal(43));
+        ligneEcritureComptable.setLibelle("Cartouches d’imprimante");
+
+        vEcritureComptable.getListLigneEcriture().add(ligneEcritureComptable);
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(4456),
+                "TVA 20%", new BigDecimal(8),
+                null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
+                "Facture F110001", null,
+                new BigDecimal(51)));
+
+        Mockito.doReturn(null).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
+        Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        manager.addReference(vEcritureComptable);
+
+        Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
+        Mockito.verify(manager,times(1)).insertOrUpdateSequenceEcritureComptable(any());
+
+        // verification de la référence
+        Assertions.assertEquals("AC-2016/00001",vEcritureComptable.getReference());
 
     }
 

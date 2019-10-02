@@ -65,7 +65,13 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
     @Override
     public SequenceEcritureComptable getSequenceByCodeJournalAndByAnneeCourante(SequenceEcritureComptable pSeqEcritureComptable) throws NotFoundException {
-        return comptabiliteDao.getSequenceByCodeJournalAndByAnneeCourante(pSeqEcritureComptable);
+        SequenceEcritureComptable sequenceEcritureComptable;
+        try{
+            sequenceEcritureComptable = comptabiliteDao.getSequenceByCodeJournalAndByAnneeCourante(pSeqEcritureComptable);
+        }catch (NotFoundException nfe ){
+            sequenceEcritureComptable = null;
+        }
+        return sequenceEcritureComptable;
     }
 
     /**
@@ -108,7 +114,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 "/" + String.format("%05d", vNumSeqEC); // format sur 5 digit
 
         pEcritureComptable.setReference(vReference);
-        pEcritureComptable = this.updateEcritureComptable(pEcritureComptable);
+//        pEcritureComptable = this.updateEcritureComptable(pEcritureComptable);
 
         /*
                 4.  Enregistrer (insert/update) la valeur de la séquence en persistance
@@ -155,7 +161,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
+    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
@@ -234,12 +240,15 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     @Override
     public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
-        this.checkEcritureComptable(pEcritureComptable);
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
+        addReference(pEcritureComptable);
+        checkEcritureComptable(pEcritureComptable);
         try {
             comptabiliteDao.insertEcritureComptable(pEcritureComptable);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
+
+
         } finally {
             getTransactionManager().rollbackMyERP(vTS);
         }

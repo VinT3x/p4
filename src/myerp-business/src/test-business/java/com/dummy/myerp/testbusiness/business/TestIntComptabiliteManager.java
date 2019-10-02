@@ -9,6 +9,8 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +30,6 @@ class TestIntComptabiliteManager {
         vEcritureComptableSample.setJournal(new JournalComptable("VE", "Vente"));
         vEcritureComptableSample.setDate(Date.from(Instant.now()));
         vEcritureComptableSample.setLibelle("Vente TI");
-        vEcritureComptableSample.setReference("VE-2019/00011");
 
         vEcritureComptableSample.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(606),
                 null, new BigDecimal(123),
@@ -43,15 +44,15 @@ class TestIntComptabiliteManager {
 
     @Test
     @Order(2)
-    void checkEcritureComptableTest() throws NotFoundException, FunctionalException {
-        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
+    void checkEcritureComptableTest() throws NotFoundException {
+        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00001");
         assertDoesNotThrow(() -> vComptabiliteManager.checkEcritureComptable(ec));
     }
 
     @Test
     @Order(3)
-    void updateEcritureComptable() throws NotFoundException {
-        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
+    void updateEcritureComptableTest() throws NotFoundException {
+        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00001");
         ec.setLibelle("modif libelle vente TI");
 
         assertDoesNotThrow(() -> vComptabiliteManager.updateEcritureComptable(ec));
@@ -59,55 +60,54 @@ class TestIntComptabiliteManager {
 
     @Test
     @Order(4)
-    void insertOrUpdateSequenceEcritureComptable() {
+    void insertOrUpdateSequenceEcritureComptableTest() {
         SequenceEcritureComptable sec = new SequenceEcritureComptable();
         sec.setAnnee(2019);
         sec.setJournalCode("VE");
-        sec.setDerniereValeur(12);
+        sec.setDerniereValeur(0);
 
         assertDoesNotThrow(() -> vComptabiliteManager.insertOrUpdateSequenceEcritureComptable(sec));
     }
 
     @Test
     @Order(5)
-    void getSequenceByCodeJournalAndByAnneeCourante() {
+    void getSequenceByCodeJournalAndByAnneeCouranteTest() {
         SequenceEcritureComptable sec = new SequenceEcritureComptable();
-        sec.setAnnee(2019);
+        sec.setAnnee(2020);
         sec.setJournalCode("VE");
-        sec.setDerniereValeur(12);
+        sec.setDerniereValeur(1);
 
         assertDoesNotThrow(() -> vComptabiliteManager.getSequenceByCodeJournalAndByAnneeCourante(sec));
     }
 
     @Test
-    void getListCompteComptable() {
+    void getListCompteComptableTest() {
         List<CompteComptable> compteComptables = vComptabiliteManager.getListCompteComptable();
         assertFalse(compteComptables.isEmpty());
     }
 
     @Test
-    void getListJournalComptable() {
+    void getListJournalComptableTest() {
         List<JournalComptable> journalComptables = vComptabiliteManager.getListJournalComptable();
         assertFalse(journalComptables.isEmpty());
     }
 
     @Test
-    void getListEcritureComptable() {
+    void getListEcritureComptableTest() {
         List<EcritureComptable> ecritureComptables = vComptabiliteManager.getListEcritureComptable();
         assertFalse(ecritureComptables.isEmpty());
     }
 
 
     @Test
-    @Order(6)
+    @Order(7)
     void deleteEcritureComptableTest() throws NotFoundException {
-        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00011");
+        EcritureComptable ec = getEcritureComptableByRef("VE-2019/00001");
         assertDoesNotThrow(() -> vComptabiliteManager.deleteEcritureComptable(ec.getId()));
     }
 
 
-
-    /**
+     /**
      *
      * @param ref, la référence de l'écriture comptable à chercher
      * @return EcritureComptable

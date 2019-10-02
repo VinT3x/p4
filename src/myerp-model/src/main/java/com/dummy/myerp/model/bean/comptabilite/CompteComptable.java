@@ -50,6 +50,8 @@ public class CompteComptable {
     }
 
 
+
+
     // ==================== Getters/Setters ====================
     public Integer getNumero() {
         return numero;

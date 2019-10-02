@@ -61,4 +61,23 @@ class EcritureComptableTest {
 
     }
 
+    @Test
+    @DisplayName("getTotalCredit() test")
+    void getTotalCredit() {
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();
+
+        vEcriture.setLibelle("getTotalCredit");
+        vEcriture.setReference("AA-1234/12345");
+        vEcriture.setJournal(new JournalComptable());
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "101.50", "33"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, "33"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "12", "33"));
+
+        BigDecimal bd = new BigDecimal (99);
+        assertEquals(vEcriture.getTotalCredit().compareTo(bd), 0);
+
+    }
+
 }
