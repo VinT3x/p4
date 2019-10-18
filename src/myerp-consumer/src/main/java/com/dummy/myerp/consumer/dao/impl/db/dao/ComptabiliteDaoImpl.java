@@ -167,8 +167,7 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         vJdbcTemplate.update(SQLinsertEcritureComptable, vSqlParams);
 
         // ----- Récupération de l'id
-        Integer vId = this.queryGetSequenceValuePostgreSQL(
-        );
+        Integer vId = this.queryGetSequenceValuePostgreSQL();
         pEcritureComptable.setId(vId);
 
         // ===== Liste des lignes d'écriture

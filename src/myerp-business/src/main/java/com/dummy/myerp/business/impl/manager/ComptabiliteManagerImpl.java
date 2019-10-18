@@ -241,17 +241,16 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     @Override
     public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException, NotFoundException {
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
-        addReference(pEcritureComptable);
-        checkEcritureComptable(pEcritureComptable);
         try {
             comptabiliteDao.insertEcritureComptable(pEcritureComptable);
+            addReference(pEcritureComptable);
+            checkEcritureComptable(pEcritureComptable);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
-
-
         } finally {
             getTransactionManager().rollbackMyERP(vTS);
         }
+
     }
 
     /**
