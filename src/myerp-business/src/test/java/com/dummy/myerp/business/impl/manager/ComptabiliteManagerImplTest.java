@@ -202,6 +202,8 @@ class ComptabiliteManagerImplTest {
         SequenceEcritureComptable vExistingSequence = new SequenceEcritureComptable(2019,3);
         Mockito.doReturn(vExistingSequence).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
+
         manager.addReference(vEcritureComptable);
 
         Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
@@ -237,6 +239,7 @@ class ComptabiliteManagerImplTest {
 
         Mockito.doReturn(null).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
         manager.addReference(vEcritureComptable);
 
         Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
@@ -267,6 +270,7 @@ class ComptabiliteManagerImplTest {
         Mockito.doReturn(null).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
         Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
+        Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
         manager.addReference(vEcritureComptable);
 
         Mockito.doThrow(new NotFoundException()).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));

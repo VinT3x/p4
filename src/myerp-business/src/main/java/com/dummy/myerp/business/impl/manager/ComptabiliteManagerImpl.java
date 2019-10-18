@@ -114,7 +114,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 "/" + String.format("%05d", vNumSeqEC); // format sur 5 digit
 
         pEcritureComptable.setReference(vReference);
-//        pEcritureComptable = this.updateEcritureComptable(pEcritureComptable);
+        pEcritureComptable = this.updateEcritureComptable(pEcritureComptable);
 
         /*
                 4.  Enregistrer (insert/update) la valeur de la séquence en persistance
