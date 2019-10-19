@@ -3,7 +3,7 @@
 ## Les tests
 Les tests unitaires et d'intégration ont permis de déceler des erreurs, voici les corections apportées :
 
-### Couche MODEL : 
+### Couche MODEL :
 Dans l'entité EcritureComptable :
 *   le pattern de la propriété reference n'était pas correct, il faut en début de chaînes 2 lettres majuscules et non pas de 1 à 5 lettres.
 *   la méthode getTotalCredit() utilisait la méthode getDebit() au lieu de getCredit(),
