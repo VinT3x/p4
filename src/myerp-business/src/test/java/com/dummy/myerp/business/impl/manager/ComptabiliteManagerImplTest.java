@@ -27,6 +27,8 @@ class ComptabiliteManagerImplTest {
 
 //    @Mock is used for mock creation. It makes the test class more readable.
 //    @Spy is used to create a spy instance. We can use it instead spy(Object) method.
+//      permet de simuler le comportement de méthodes à l'intérieur de la classe à tester.
+
 //    @InjectMocks is used to instantiate the tested object automatically and inject all the @Mock or @Spy annotated field dependencies into it (if applicable).
 //    @Captor is used to create an argument captor
 
@@ -156,37 +158,42 @@ class ComptabiliteManagerImplTest {
 
     @Test
     void checkEcritureComptableContext() throws NotFoundException {
-
+        // ------ Given
         // une ecriture comptable existe déjà avec cette référence
         EcritureComptable vEcritureComptableRefAlreadyExist = new EcritureComptable();
         vEcritureComptableRefAlreadyExist.setReference("AC-2019/11111");
 
         when(comptabiliteDaoMock.getEcritureComptableByRef(anyString())).thenReturn(vEcritureComptableRefAlreadyExist);
 
+        // ------ Then
         assertThrows(FunctionalException.class, () -> {
             manager.checkEcritureComptableContext(vEcritureComptable);
         });
 
+        // ------ Given
         // si elles ont le même id, donc même objet alors pas d'erreur
         vEcritureComptable.setId(2);
         vEcritureComptableRefAlreadyExist.setId(2);
         assertDoesNotThrow(() -> manager.checkEcritureComptableContext(vEcritureComptable));
 
-        // si aucune référence identique, pas d'    erreur
+        // si aucune référence identique, pas d'erreur
         when(comptabiliteDaoMock.getEcritureComptableByRef(anyString()))
                 .thenThrow(NotFoundException.class);
+
+        // ------ Then
         assertDoesNotThrow(() -> manager.checkEcritureComptableContext(vEcritureComptable));
 
     }
 
     @Test
     void addReferenceWithSequenceEcritureComptable() throws NotFoundException, FunctionalException, ParseException {
+        // ------ Given
         vEcritureComptable.setId(-1);
         JournalComptable journalComptable = new JournalComptable();
         journalComptable.setCode("AC");
         journalComptable.setLibelle("Achat");
         vEcritureComptable.setJournal(journalComptable);
-        vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
+        vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2019/12/31"));
         vEcritureComptable.setLibelle("Cartouches d’imprimante");
 
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(606),
@@ -204,18 +211,21 @@ class ComptabiliteManagerImplTest {
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
         Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
 
+        // ------When
         manager.addReference(vEcritureComptable);
 
+
+        // ------Then
         Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
         Mockito.verify(manager,times(1)).insertOrUpdateSequenceEcritureComptable(any());
-
         // verification de la référence
-        Assertions.assertEquals("AC-2016/00004",vEcritureComptable.getReference());
+        Assertions.assertEquals("AC-2019/00004",vEcritureComptable.getReference());
 
     }
 
     @Test
     void addReferenceWithoutSequenceEcritureComptable() throws NotFoundException, FunctionalException, ParseException {
+        // ------ Given
         vEcritureComptable.setId(-1);
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
@@ -240,11 +250,14 @@ class ComptabiliteManagerImplTest {
         Mockito.doReturn(null).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
         Mockito.doNothing().when(manager).insertOrUpdateSequenceEcritureComptable(any());
         Mockito.doReturn(vEcritureComptable).when(manager).updateEcritureComptable(any());
+
+        // ------When
         manager.addReference(vEcritureComptable);
 
         Mockito.verify(manager, times(1)).getSequenceByCodeJournalAndByAnneeCourante(any());
         Mockito.verify(manager,times(1)).insertOrUpdateSequenceEcritureComptable(any());
 
+        // ------Then
         // verification de la référence
         Assertions.assertEquals("AC-2016/00001",vEcritureComptable.getReference());
 
@@ -252,6 +265,7 @@ class ComptabiliteManagerImplTest {
 
     @Test
     void addReferenceNoExistingSequence() throws NotFoundException, FunctionalException, ParseException {
+        // ------ Given
         vEcritureComptable.setId(-1);
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new SimpleDateFormat("yyyy/MM/dd").parse("2016/12/31"));
@@ -275,10 +289,12 @@ class ComptabiliteManagerImplTest {
 
         Mockito.doThrow(new NotFoundException()).when(manager).getSequenceByCodeJournalAndByAnneeCourante(any(SequenceEcritureComptable.class));
 
+        // ------When
         assertThrows(NotFoundException.class, () -> {
             manager.addReference(vEcritureComptable);
         });
 
+        // ------Then
         // verification de la référence
         Assertions.assertEquals("AC-2016/00001",vEcritureComptable.getReference());
 
