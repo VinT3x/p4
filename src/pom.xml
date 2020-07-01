@@ -51,7 +51,7 @@
         <application.name>MyERP</application.name>
 
         <!-- ===== Version properties ===== -->
-        <log4j.version>2.11.2</log4j.version>
+        <log4j.version>2.13.3</log4j.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
